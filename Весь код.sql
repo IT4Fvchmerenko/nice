@@ -166,6 +166,10 @@ ALTER TABLE public.quotes
 ADD CONSTRAINT quotes_fkey FOREIGN KEY ("ISIN") REFERENCES public.listing ("ISIN")
 ;
 
+-- Комментарий:
+-- Неверно! bond_description должна быть материнской таблицей по отношению listing, т.к. одна и также облигация может торговаться на разных площадках и/или в разных секциях.
+-- ISIN в двух таблицах не является уникальным полем.
+
 -- Заданьице 4. Здесь прям не уверен т.к. не мог проверить из-за того, что БД не грузится
 
 SELECT public.bond_description"IssuerName", public.listing."ISIN", public.quotes."ASK" AS "nun_ratio"
@@ -177,3 +181,6 @@ WHERE public.listing."Platform" LIKE 'Московская%'
 	AND count ("ASK")
 		(WHERE "ASK" = 0) <= 0.1 * count ("ASK") 
 ;
+
+-- Комментарий:
+-- Неверно!    1. Ошибки синтаксиса - нет имен вложеных запросов. 2. Нужно отбирать эмитентов, у которых ВСЕ торгуемые облигации, являются активно котируемыми.
